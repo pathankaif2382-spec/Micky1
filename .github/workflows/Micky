@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mickys Grocery | Fresh Groceries & Daily Needs</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==================== GLOBAL STYLES & CSS VARIABLES ==================== */
+    :root {
+      --primary: #2e7d32;
+      --primary-hover: #1b5e20;
+      --secondary: #ff9800;
+      --background: #f8f9fa;
+      --surface: #ffffff;
+      --text-main: #212529;
+      --text-muted: #6c757d;
+      --border: #e9ecef;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --radius: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: var(--background);
+      color: var(--text-main);
+      padding-bottom: 80px;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* ==================== HEADER ==================== */
+    header {
+      background: linear-gradient(135deg, #2e7d32, #1b5e20);
+      color: white;
+      padding: 24px 16px;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+
+    header h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    header p {
+      font-size: 0.95rem;
+      opacity: 0.9;
+    }
+
+    header .location {
+      font-size: 0.8rem;
+      margin-top: 6px;
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 2px 10px;
+      border-radius: 20px;
+    }
+
+    /* ==================== CONTAINER & CATEGORIES ==================== */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    .categories {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding: 10px 0;
+      margin-bottom: 16px;
+      scrollbar-width: none; /* Firefox */
+    }
+
+    .categories::-webkit-scrollbar {
+      display: none; /* Chrome/Safari */
+    }
+
+    .category-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      color: var(--text-main);
+    }
+
+    .category-btn.active, .category-btn:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    /* ==================== PRODUCT GRID ==================== */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
+    }
+
+    .product-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.2s ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .product-img-wrapper {
+      width: 100%;
+      height: 160px;
+      background: #f1f1f1;
+      overflow: hidden;
+    }
+
+    .product-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .product-details {
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .product-title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .product-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+      flex-grow: 1;
+    }
+
+    .product-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 8px;
+    }
+
+    .product-price {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .add-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .add-btn:hover {
+      background: var(--primary-hover);
+    }
+
+    /* ==================== FLOATING BUTTONS ==================== */
+    .floating-buttons {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      z-index: 99;
+    }
+
+    .float-btn {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      cursor: pointer;
+      border: none;
+      position: relative;
+      transition: transform 0.2s ease;
+    }
+
+    .float-btn:hover {
+      transform: scale(1.08);
+    }
+
+    .whatsapp-btn {
+      background-color: #25D366;
+    }
+
+    .cart-btn-float {
+      background-color: var(--primary);
+    }
+
+    .cart-badge {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      background: #d32f2f;
+      color: white;
+      font-size: 0.75rem;
+      font-weight: bold;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ==================== MODALS ==================== */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      justify-content: center;
+      align-items: flex-end;
+      z-index: 100;
+    }
+
+    @media (min-width: 600px) {
+      .modal-overlay {
+        align-items: center;
+      }
+    }
+
+    .modal-content {
+      background: var(--surface);
+      width: 100%;
+      max-width: 500px;
+      max-height: 85vh;
+      border-radius: 20px 20px 0 0;
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      animation: slideUp 0.3s ease-out;
+    }
+
+    @media (min-width: 600px) {
+      .modal-content {
+        border-radius: var(--radius);
+      }
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 12px;
+      margin-bottom: 12px;
+    }
+
+    .modal-header h2 {
+      font-size: 1.2rem;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--text-muted);
+    }
+
+    /* Cart Items list */
+    .cart-items {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 8px;
+      border-bottom: 1px dashed var(--border);
+    }
+
+    .cart-item-info h4 {
+      font-size: 0.95rem;
+    }
+
+    .cart-item-info p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .qty-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .qty-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      background: var(--background);
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .cart-summary {
+      border-top: 2px solid var(--border);
+      padding-top: 12px;
+      margin-top: auto;
+    }
+
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .checkout-btn {
+      width: 100%;
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* Form Styles */
+    .form-group {
+      margin-bottom: 12px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .form-group input, .form-group textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 0.9rem;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      height: 60px;
+    }
+
+    .empty-cart-msg {
+      text-align: center;
+      padding: 30px 0;
+      color: var(--text-muted);
+    }
+
+    /* Confirmation Modal */
+    .success-box {
+      text-align: center;
+      padding: 20px 0;
+    }
+
+    .success-box svg {
+      width: 60px;
+      height: 60px;
+      fill: var(--primary);
+      margin-bottom: 12px;
+    }
+
+    .wa-confirm-btn {
+      display: inline-block;
+      background: #25D366;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      margin-top: 16px;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== HEADER ==================== -->
+  <header>
+    <h1>Mickys Grocery</h1>
+    <p>Fresh groceries & daily essentials delivered to your door</p>
+    <span class="location">📍 Solapur, Maharashtra</span>
+  </header>
+
+  <!-- ==================== MAIN CONTENT ==================== -->
+  <div class="container">
+    <!-- Category Filter -->
+    <div class="categories">
+      <button class="category-btn active" onclick="filterCategory('All')">All Items</button>
+      <button class="category-btn" onclick="filterCategory('Groceries')">Groceries</button>
+      <button class="category-btn" onclick="filterCategory('Dairy')">Dairy</button>
+      <button class="category-btn" onclick="filterCategory('Snacks')">Snacks</button>
+      <button class="category-btn" onclick="filterCategory('Beverages')">Beverages</button>
+    </div>
+
+    <!-- Product Grid -->
+    <div class="product-grid" id="productGrid">
+      <!-- JavaScript will inject products here -->
+    </div>
+  </div>
+
+  <!-- ==================== FLOATING BUTTONS ==================== -->
+  <div class="floating-buttons">
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/919423247925" target="_blank" class="float-btn whatsapp-btn" title="Chat on WhatsApp">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
+        <path d="M12.012 2c-5.506 0-9.989 4.478-9.99 9.984 0 1.762.459 3.48 1.332 5.001l-1.416 5.17 5.291-1.388c1.473.803 3.134 1.226 4.781 1.227h.004c5.505 0 9.988-4.478 9.989-9.985 0-2.668-1.039-5.176-2.926-7.062a9.922 9.922 0 0 0-7.065-2.947zm0 1.66c4.588 0 8.326 3.737 8.327 8.325 0 2.223-.865 4.312-2.438 5.884a8.27 8.27 0 0 1-5.889 2.45h-.003c-1.42 0-2.822-.381-4.053-1.101l-.291-.171-3.011.79.803-2.934-.188-.3a8.292 8.292 0 0 1-1.272-4.32c.001-4.588 3.739-8.323 8.325-8.323zm4.568 11.758c-.197-.099-1.168-.576-1.349-.642-.181-.066-.313-.099-.444.099-.132.197-.51.642-.625.773-.115.132-.23.148-.427.049-.197-.099-.834-.307-1.589-.98-.588-.524-.985-1.171-1.101-1.368-.115-.197-.012-.304.086-.402.088-.088.197-.23.296-.345.099-.115.132-.197.197-.329.066-.132.033-.247-.016-.345-.049-.099-.444-1.07-.609-1.465-.16-.385-.323-.333-.444-.339-.115-.006-.247-.007-.378-.007s-.345.049-.526.247c-.181.197-.691.675-.691 1.646s.707 1.907.806 2.039c.099.132 1.391 2.124 3.37 2.978.471.203.839.324 1.126.416.473.151.903.13 1.243.079.379-.057 1.168-.477 1.332-.938.165-.461.165-.856.115-.938-.049-.082-.181-.131-.378-.23z"/>
+      </svg>
+    </a>
+
+    <!-- Cart Floating Button -->
+    <button class="float-btn cart-btn-float" onclick="openCartModal()" title="View Cart">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="9" cy="21" r="1"></circle>
+        <circle cx="20" cy="21" r="1"></circle>
+        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+      </svg>
+      <span class="cart-badge" id="cartBadge">0</span>
+    </button>
+  </div>
+
+  <!-- ==================== CART MODAL ==================== -->
+  <div class="modal-overlay" id="cartModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Your Shopping Cart</h2>
+        <button class="close-btn" onclick="closeCartModal()">&times;</button>
+      </div>
+
+      <div class="cart-items" id="cartItemsContainer">
+        <!-- Dynamic Cart Items -->
+      </div>
+
+      <div class="cart-summary" id="cartSummary">
+        <div class="total-row">
+          <span>Grand Total:</span>
+          <span id="grandTotal">₹0</span>
+        </div>
+        <button class="checkout-btn" onclick="openCheckoutModal()">Proceed to Order</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== CHECKOUT FORM MODAL ==================== -->
+  <div class="modal-overlay" id="checkoutModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Delivery Details</h2>
+        <button class="close-btn" onclick="closeCheckoutModal()">&times;</button>
+      </div>
+
+      <!-- FORMSPREE INTEGRATION WITH UPDATED OWNER GMAIL -->
+      <form id="orderForm" action="https://formspree.io/f/xeaajyal" method="POST" onsubmit="handleFormSubmit(event)">
+        <!-- Hidden field to pass compiled readable cart order summary -->
+        <input type="hidden" name="Order_Summary" id="hiddenOrderSummary">
+        <input type="hidden" name="Grand_Total" id="hiddenGrandTotal">
+        <input type="hidden" name="Shop_Owner_Email" value="mk.digitalmarketing.co@gmail.com">
+
+        <div class="form-group">
+          <label for="custName">Full Name *</label>
+          <input type="text" id="custName" name="Customer_Name" required placeholder="e.g. Ramesh Kumar">
+        </div>
+
+        <div class="form-group">
+          <label for="custPhone">Phone Number *</label>
+          <input type="tel" id="custPhone" name="Customer_Phone" required placeholder="e.g. 9876543210">
+        </div>
+
+        <div class="form-group">
+          <label for="custAddress">Delivery Address *</label>
+          <textarea id="custAddress" name="Delivery_Address" required placeholder="House No, Street, Landmark..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="custNotes">Special Instructions (Optional)</label>
+          <input type="text" id="custNotes" name="Instructions" placeholder="e.g. Deliver before 5 PM">
+        </div>
+
+        <button type="submit" class="checkout-btn" style="margin-top: 10px;">Place Order</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== CONFIRMATION MODAL ==================== -->
+  <div class="modal-overlay" id="confirmModal">
+    <div class="modal-content">
+      <div class="success-box">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+        </svg>
+        <h3>Order Submitted Successfully!</h3>
+        <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 8px;">
+          Mickys Grocery will contact you on WhatsApp shortly to confirm availability and timing.
+        </p>
+        <a href="https://wa.me/919423247925" target="_blank" class="wa-confirm-btn">Confirm on WhatsApp</a>
+        <br>
+        <button class="close-btn" style="font-size: 0.9rem; margin-top: 15px; text-decoration: underline;" onclick="closeConfirmModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== JAVASCRIPT ==================== -->
+  <script>
+    /* 1. PRODUCTS DATA LIST */
+    const products = [
+      { id: 1, name: "Aashirvaad Atta (5kg)", price: 280, category: "Groceries", image: "https://ibb.co/4nT1d0LX", desc: "100% Pure Whole Wheat Flour" },
+      { id: 2, name: "Fortune Sunflower Oil (1L)", price: 145, category: "Groceries", image: "https://ibb.co/5XghnSc4", desc: "Refined Healthy Cooking Oil" },
+      { id: 3, name: "Amul Butter (500g)", price: 275, category: "Dairy", image: "https://ibb.co/xKWJZ4Hz", desc: "Delicious Salted Pasteurised Butter" },
+      { id: 4, name: "Amul Taaza Milk (1L)", price: 56, category: "Dairy", image: "https://ibb.co/mCnKKzkG", desc: "Fresh Toned Milk" },
+      { id: 5, name: "Lay's Magic Masala (50g)", price: 20, category: "Snacks", image: "https://ibb.co/qFL70sJW", desc: "Spicy Indian Masala Potato Chips" },
+      { id: 6, name: "Good Day Cookies (200g)", price: 30, category: "Snacks", image: "https://ibb.co/CpH2RV9h", desc: "Rich Cashew Butter Cookies" },
+      { id: 7, name: "Coca-Cola (750ml)", price: 40, category: "Beverages", image: "https://ibb.co/4nT1d0LX", desc: "Chilled Soft Drink" },
+      { id: 8, name: "Tata Tea Gold (250g)", price: 160, category: "Beverages", image: "https://ibb.co/5XghnSc4", desc: "Rich & Aromatic Black Tea" },
+      { id: 9, name: "Tata Salt (1kg)", price: 28, category: "Groceries", image: "https://ibb.co/xKWJZ4Hz", desc: "Iodized Vacuum Evaporated Salt" },
+      { id: 10, name: "Amul Paneer (200g)", price: 95, category: "Dairy", image: "https://ibb.co/mCnKKzkG", desc: "Fresh & Soft Cottage Cheese" }
+    ];
+
+    /* 2. APP STATE */
+    let cart = JSON.parse(localStorage.getItem('mg_cart')) || [];
+
+    /* 3. RENDER PRODUCTS */
+    function renderProducts(categoryFilter = 'All') {
+      const grid = document.getElementById('productGrid');
+      grid.innerHTML = '';
+
+      const filtered = categoryFilter === 'All' 
+        ? products 
+        : products.filter(p => p.category === categoryFilter);
+
+      filtered.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        card.innerHTML = `
+          <div class="product-img-wrapper">
+            <img src="${p.image}" alt="${p.name}" class="product-img" loading="lazy" onerror="this.src='https://via.placeholder.com/200?text=Product'">
+          </div>
+          <div class="product-details">
+            <h3 class="product-title">${p.name}</h3>
+            <p class="product-desc">${p.desc}</p>
+            <div class="product-footer">
+              <span class="product-price">₹${p.price}</span>
+              <button class="add-btn" onclick="addToCart(${p.id})">+ Add</button>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    /* 4. FILTER CATEGORIES */
+    function filterCategory(catName) {
+      document.querySelectorAll('.category-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.innerText.includes(catName) || (catName === 'All' && btn.innerText === 'All Items'));
+      });
+      renderProducts(catName);
+    }
+
+    /* 5. CART OPERATIONS */
+    function addToCart(productId) {
+      const existing = cart.find(item => item.id === productId);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        const prod = products.find(p => p.id === productId);
+        cart.push({ ...prod, qty: 1 });
+      }
+      saveAndUpdateCart();
+    }
+
+    function updateQty(productId, delta) {
+      const item = cart.find(i => i.id === productId);
+      if (item) {
+        item.qty += delta;
+        if (item.qty <= 0) {
+          cart = cart.filter(i => i.id !== productId);
+        }
+      }
+      saveAndUpdateCart();
+    }
+
+    function saveAndUpdateCart() {
+      localStorage.setItem('mg_cart', JSON.stringify(cart));
+      updateCartUI();
+    }
+
+    function updateCartUI() {
+      // Badge count
+      const totalCount = cart.reduce((sum, item) => sum + item.qty, 0);
+      document.getElementById('cartBadge').innerText = totalCount;
+
+      // Cart Container Content
+      const container = document.getElementById('cartItemsContainer');
+      const summary = document.getElementById('cartSummary');
+
+      if (cart.length === 0) {
+        container.innerHTML = `<div class="empty-cart-msg">Your cart is currently empty.</div>`;
+        summary.style.display = 'none';
+        return;
+      }
+
+      summary.style.display = 'block';
+      container.innerHTML = '';
+      let grandTotal = 0;
+
+      cart.forEach(item => {
+        const itemTotal = item.price * item.qty;
+        grandTotal += itemTotal;
+
+        const el = document.createElement('div');
+        el.className = 'cart-item';
+        el.innerHTML = `
+          <div class="cart-item-info">
+            <h4>${item.name}</h4>
+            <p>₹${item.price} × ${item.qty} = ₹${itemTotal}</p>
+          </div>
+          <div class="qty-controls">
+            <button class="qty-btn" onclick="updateQty(${item.id}, -1)">-</button>
+            <span>${item.qty}</span>
+            <button class="qty-btn" onclick="updateQty(${item.id}, 1)">+</button>
+          </div>
+        `;
+        container.appendChild(el);
+      });
+
+      document.getElementById('grandTotal').innerText = `₹${grandTotal}`;
+    }
+
+    /* 6. MODAL CONTROL FUNCTIONS */
+    function openCartModal() {
+      updateCartUI();
+      document.getElementById('cartModal').style.display = 'flex';
+    }
+
+    function closeCartModal() {
+      document.getElementById('cartModal').style.display = 'none';
+    }
+
+    function openCheckoutModal() {
+      if (cart.length === 0) return;
+      closeCartModal();
+      
+      // Prepare hidden order summary text for Formspree email
+      let summaryText = "";
+      let grandTotal = 0;
+      cart.forEach((item, index) => {
+        const itemTotal = item.price * item.qty;
+        grandTotal += itemTotal;
+        summaryText += `${index + 1}. ${item.name} - Qty: ${item.qty} | Price: ₹${item.price} | Subtotal: ₹${itemTotal}\n`;
+      });
+
+      document.getElementById('hiddenOrderSummary').value = summaryText;
+      document.getElementById('hiddenGrandTotal').value = `₹${grandTotal}`;
+
+      document.getElementById('checkoutModal').style.display = 'flex';
+    }
+
+    function closeCheckoutModal() {
+      document.getElementById('checkoutModal').style.display = 'none';
+    }
+
+    function closeConfirmModal() {
+      document.getElementById('confirmModal').style.display = 'none';
+    }
+
+    /* 7. FORM SUBMISSION (FORMSPREE) */
+    async function handleFormSubmit(event) {
+      event.preventDefault();
+      const form = event.target;
+      const data = new FormData(form);
+
+      try {
+        const response = await fetch(form.action, {
+          method: form.method,
+          body: data,
+          headers: {
+            'Accept': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          // Clear Cart
+          cart = [];
+          saveAndUpdateCart();
+
+          // Reset Form & Close Checkout
+          form.reset();
+          closeCheckoutModal();
+
+          // Show Success Modal
+          document.getElementById('confirmModal').style.display = 'flex';
+        } else {
+          alert("Order submission failed. Please check your Formspree account setup.");
+        }
+      } catch (error) {
+        alert("An error occurred. Please try again or order directly via WhatsApp.");
+      }
+    }
+
+    /* INITIALIZE */
+    renderProducts();
+    updateCartUI();
+  </script>
+</body>
+</html>
